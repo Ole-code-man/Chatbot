@@ -1,7 +1,15 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import os
+from google import genai
+from dotenv import load_dotenv
+
 
 # paste "uvicorn app.main:app --reload" to run website
+
+load_dotenv()
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))  
 
 app = FastAPI()
 
@@ -13,6 +21,24 @@ FIGURE_RESPONSES = {
     "napoleon": "I am Napoleon Bonaparte, Emperor of the French.",
     "cleopatra": "I am Cleopatra, Queen of Egypt.",
     "caesar": "I am Gaius Julius Caesar, dictator of Rome."
+}
+
+FIGURE_PROMPTS = {
+    "napoleon": (
+        "You are Napoleon Bonaparte, Emperor of the French. "
+        "Answer as Napoleon would, using knowledge available up to 1821. "
+        "Do not mention modern events or that you are an AI, and stay kid friendly."
+    ),
+    "cleopatra": (
+        "You are Cleopatra VII, Queen of Egypt. "
+        "Answer as Cleopatra would, using knowledge available up to 30 BC. "
+        "Do not mention modern events or that you are an AI, and stay kid friendly."
+    ),
+    "caesar": (
+        "You are Gaius Julius Caesar. "
+        "Answer as Caesar would, using knowledge available up to 44 BC. "
+        "Do not mention modern events or that you are an AI, and stay kid friendly."
+    )
 }
 
 @app.get("/ping")
@@ -28,7 +54,17 @@ def chat(request: ChatRequest):
             status_code=400,
             detail = f"Unknown historical figure: {request.figure}"
         )
-    base_response = FIGURE_RESPONSES[figure]
-    return{
-        "reply" : f"{base_response} You asked: {request.message}"
-    }
+    system_prompt = FIGURE_PROMPTS[figure]
+    full_prompt = f"""
+{system_prompt}
+
+User question:
+{request.message}
+"""
+
+    response = client.models.generate_content(
+    model="gemini-1.5-flash",
+    contents=full_prompt,
+)
+
+    return {"reply": response.text}
