@@ -5,11 +5,10 @@
 .page_wrapper {
   height: 100vh;
   display: flex;
-  flex-direction: column; 
+  flex-direction: row; 
   overflow: hidden; 
   max-width: 900px;
   width: 100%;
-  margin: 0 auto;
   border-left: 2px solid #04040c;
   border-right: 2px solid #04040c;
   min-height: 100vh;
@@ -26,7 +25,7 @@ body {
   align-items: center;
   font-family: Arial, sans-serif;
   color: aliceblue;
-  padding-top: 10px;
+  padding-top: 5px;
 }
 .app-container2 {
   flex: 1;
@@ -42,7 +41,7 @@ body {
 .button-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
   align-items: center;
 }
 
@@ -112,24 +111,36 @@ img{
   align-self: flex-start;
   background-color: #16314b;
 }
-.layout {
-  display: flex;
+.main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px;
   flex-shrink: 0;
   background-color: #1a1a1a;
   padding: 10px;
   overflow-y: auto;
   border-right: 1px solid #333;
+  align-self: center;
+  max-height: 60vh;
+  border-radius: 12px;
+  margin: 10px;
 }
 
 .sidebar h3 {
   color: aliceblue;
   margin-top: 0;
+}
+
+.outer-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100vh;
 }
 
 .session-item {

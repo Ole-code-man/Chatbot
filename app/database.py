@@ -49,7 +49,7 @@ def get_sessions() -> list:
         SELECT session_id, figure, MIN(timestamp)
         FROM messages
         GROUP BY session_id
-        ORDER BY started DESC
+        ORDER BY MIN(timestamp) DESC
     """)
     rows = cursor.fetchall()
     conn.close()

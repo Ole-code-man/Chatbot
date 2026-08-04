@@ -4,7 +4,7 @@ import os
 from google import genai
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
-from app.database import init_db, save_message, load_messages
+from app.database import init_db, save_message, load_messages, get_sessions
 
 # paste ".\venv\Scripts\Activate.ps1" "uvicorn app.main:app --reload" to run website
 
@@ -111,7 +111,7 @@ def chat(request: ChatRequest):
 def get_all_sessions():
     return get_sessions()
 
-@app.get("/sessions/{session_id}")
-def get_sessions(session_id: str):
+@app.get("/session/{session_id}")
+def get_session(session_id: str):
     messages = load_messages(session_id)
     return {"chat": messages}
