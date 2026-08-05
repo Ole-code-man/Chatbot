@@ -111,7 +111,7 @@ def chat(request: ChatRequest):
 def get_all_sessions():
     return get_sessions()
 
-@app.get("/session/{session_id}")
+@app.get("/sessions/{session_id}")
 def get_session(session_id: str):
     messages = load_messages(session_id)
     return {"chat": messages}
